@@ -1,0 +1,4 @@
+counter.c:13:6:setCounter	16	static
+counter.c:17:6:updateLCD	8	static
+counter.c:25:6:counterRun	8	static
+counter.c:33:6:increaseDuration	16	static

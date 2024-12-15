@@ -1,1 +1,3 @@
-traffic_light_fsm_set.c:10:6:traffic_light_fsm_set	8	static
+traffic_light_fsm_set.c:9:13:add_duration	16	static
+traffic_light_fsm_set.c:16:16:isValid	24	static
+traffic_light_fsm_set.c:22:6:traffic_light_fsm_set	8	static

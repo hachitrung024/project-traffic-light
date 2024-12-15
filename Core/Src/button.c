@@ -59,3 +59,6 @@ uint8_t isButtonHolding(uint8_t index){
 	if(index >= MAX_BUTTONS) return 0;
 	return button_hold_flags[index];
 }
+void setButton(uint8_t index){
+	button_press_flags[index] = 1;
+}

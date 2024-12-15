@@ -17,5 +17,6 @@
 void buttonRun();
 uint8_t isButtonPressed(uint8_t index);
 uint8_t isButtonHolding(uint8_t index);
+void setButton(uint8_t index);
 
 #endif /* INC_BUTTON_H_ */

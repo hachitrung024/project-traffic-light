@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Traffic Light Controller</title>
+   <style>
+       body {
+           font-family: Arial, sans-serif;
+           background-color:gray;
+           margin: 0;
+           padding: 0;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+       }
+
+       header {
+           width: 100%;
+           background: #4b99f3;
+           color: white;
+           padding: 10px 0;
+           text-align: center;
+       }
+
+       .dashboard {
+           display: flex;
+           flex-wrap: wrap;
+           justify-content: center;
+           width: 95%;
+           max-width: 1200px;
+           margin: 20px 0;
+           gap: 20px;
+       }
+
+       .charts {
+           flex: 1 1 calc(50% - 20px);
+           display: flex;
+           flex-direction: column;
+           gap: 20px;
+           min-width: 300px;
+       }
+
+       .chart-container {
+            background: dimgray;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            height: 250px;  
+            display: flex;
+            flex-direction: column;
+            justify-content:flex-start;
+            align-items: stretch;
+        }
+        .display-container {
+            border: 10px solid #000000;
+            background-color: rgb(0, 128, 255);
+            border-radius: 10px; 
+            padding: 10px ;
+            margin: 20px auto;
+            max-width: 80%;
+            text-align: center; 
+            font-family: 'Lucida Console', monospace;
+            justify-content:center;
+            align-items: center;
+        }
+        .chart-container p {
+            font-size: 2.5rem;        /* Tăng kích thước font chữ */
+            white-space: pre;
+            font-weight: bold;        /* Chữ đậm */
+            margin: 10px 0;           /* Khoảng cách giữa các dòng */
+        }
+
+        .chart-container span {
+            color: aliceblue;           /* Màu xanh cho giá trị */
+            font-size: calc(1.5rem+ 1vw);
+        }
+        .chart-header {
+            flex: 0 0 auto;
+            text-align: center;
+            background-color: inherit;
+            font-size: 2vw;
+            font-weight: bold;
+        }
+        .chart-container h1 {
+            margin-bottom: 1px;
+            color: white;
+        }
+        .button-container {
+            display: grid;
+            border: 10px #000000;
+            grid-template-columns: repeat(2, 120px); /* Hai cột */
+            gap: 30px; /* Khoảng cách giữa các nút */
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .control-button {
+            width: auto;
+            height: auto;
+            font-size: 30px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .control-button:hover {
+            background-color: #0056b3;
+        }
+
+       .gauges {
+           flex: 1 1 calc(50% - 20px);
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+           gap: 20px;
+           min-width: 300px;
+       }
+
+       .gauge-container {
+           text-align: center;
+           background: lightgray;
+           border-radius: 8px;
+           padding: 20px;
+           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+           height: 250px;
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           display: flex;
+            align-items: center;
+            margin: 0;
+       }
+       .traffic-light {
+            width: 80px;
+            background-color: rgb(36, 12, 33);
+            border-radius: 20px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .light {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: gray; /* Mặc định màu tắt */
+            opacity: 0.3; /* Giảm độ sáng khi tắt */
+            transition: opacity 0.5s; /* Hiệu ứng chuyển đổi mượt mà */
+        }
+
+        .light.red.active {
+            background-color: red;
+            opacity: 1; /* Hiển thị đầy đủ khi sáng */
+        }
+
+        .light.yellow.active {
+            background-color: yellow;
+            opacity: 1;
+        }
+
+        .light.green.active {
+            background-color: green;
+            opacity: 1;
+        }
+       
+   </style>
+</head>
+<body>
+   <div class="dashboard">
+       <!-- Charts Section -->
+       <div class="charts">
+           <div class="chart-container">
+               <header class="chart-header">Display</header>
+               <div class="display-container">
+                <p><span id="line1Value">>AUTO RED  GREEN</span></p>
+                <p><span id="line2Value">_MANU AMBER      </span></p>
+                </div>
+            </div>
+            <div class="chart-container">
+                <header class="chart-header">Control</header>
+                <div class="button-container">
+                  <button class="control-button" id="button-MODE" onclick="handleButtonClick('MODE')">MODE</button>
+                  <button class="control-button" id="button-SET" onclick="handleButtonClick('SET')">SET</button>
+                  <button class="control-button" id="button-OK" onclick="handleButtonClick('OK')">OK</button>
+                  <button class="control-button" id="button-RESET" onclick="handleButtonClick('RESET')">RESET</button>
+                </div>
+              </div>
+        </div>
+        
+        <!-- Gauges Section -->
+        <div class="gauges">
+            <div class="gauge-container">
+                <h4> </h4>
+                <canvas id="gaugeBattery"></canvas>
+                <div class="gauge-value" id="batteryValue"></div>
+            </div>
+            
+            <div class="gauge-container">
+                <h4>Way1</h4>
+                <div class= "traffic-light" id = "light1">
+                    <div class="light red"></div>
+                    <div class="light yellow"></div>
+                    <div class="light green"></div>
+                </div>
+            </div>
+            
+            <div class="gauge-container">
+                <h4></h4>
+                <canvas id="gaugeLuminosity"></canvas>
+                <div class="gauge-value" id="luminosityValue"></div>
+            </div>
+            
+            
+            
+            
+            <div class="gauge-container">
+                <h4></h4>
+                <canvas id="gaugeLuminosity"></canvas>
+                <div class="gauge-value" id="luminosityValue"></div>
+            </div>
+            <div class="gauge-container">
+                <h4></h4>
+                <canvas id="gaugeLuminosity"></canvas>
+                <div class="gauge-value" id="luminosityValue"></div>
+            </div>
+            <div class="gauge-container">
+                <h4>Way2</h4>
+                <div class= "traffic-light" id = "light2">
+                    <div class="light red"></div>
+                    <div class="light yellow"></div>
+                    <div class="light green"></div>
+                </div>
+            </div>
+            
+       </div>
+   </div>
+
+   <script>
+        async function updateDisplay() {
+            try {
+                const response = await fetch('/data');
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+
+                document.getElementById('line1Value').innerText = data.l1 || 'N/A';
+                document.getElementById('line2Value').innerText = data.l2 || 'N/A';
+                setState(data.s);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+
+            setTimeout(updateDisplay, 1000); // Gọi lại sau khi hoàn thành
+        }
+        updateDisplay(); // Khởi chạy lần đầu
+        function handleButtonClick(action, retryCount = 2) {
+            const button = document.getElementById(`button-${action}`);
+            button.textContent = "..."; // Thay đổi nội dung nút
+            button.disabled = true;
+
+            function sendRequest(attemptsLeft) {
+                fetch(`/control?action=${action}`, { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log(`${action} action successful`);
+                        } else {
+                            console.error(`${action} action failed.`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error(`Error handling ${action} button:`, error);
+                    })
+                    .finally(() => {
+                        button.textContent = action.charAt(0).toUpperCase() + action.slice(1); // Khôi phục nội dung nút
+                        button.disabled = false;
+                    });
+            }
+
+            sendRequest(retryCount);
+        }
+        const States = {
+            INIT: 0,
+            SEL_AUTO: 1,
+            SEL_MAN: 2,
+            SEL_RED: 3,
+            SEL_AMBER: 4,
+            SEL_GREEN: 5,
+            AUTO_RED_GREEN: 6,
+            AUTO_RED_AMBER: 7,
+            AUTO_GREEN_RED: 8,
+            AUTO_AMBER_RED: 9,
+            MAN_RED_GREEN: 10,
+            MAN_RED_AMBER: 11,
+            MAN_GREEN_RED: 12,
+            MAN_AMBER_RED: 13,
+            SET_RED: 14,
+            SET_AMBER: 15,
+            SET_GREEN: 16,
+        };
+        let currentState = States.INIT;
+
+        function setLight(lightId, color) {
+            const lights = document.querySelectorAll(`#${lightId} .light`);
+            lights.forEach(light => light.classList.remove('active'));
+            if (color) {
+                document.querySelector(`#${lightId} .${color}`).classList.add('active');
+            }
+        }
+
+        function setState(state) {
+            currentState = state; // Cập nhật trạng thái hiện tại
+
+            switch (state) {
+                case States.AUTO_RED_GREEN:
+                case States.MAN_RED_GREEN:
+                    // Đèn 1 đỏ, đèn 2 xanh
+                    setLight('light1', 'red');
+                    setLight('light2', 'green');
+                    break;
+
+                case States.AUTO_RED_AMBER:
+                case States.MAN_RED_AMBER:
+                    // Đèn 1 đỏ, đèn 2 vàng
+                    setLight('light1', 'red');
+                    setLight('light2', 'yellow');
+                    break;
+
+                case States.AUTO_GREEN_RED:
+                case States.MAN_GREEN_RED:
+                    // Đèn 1 xanh, đèn 2 đỏ
+                    setLight('light1', 'green');
+                    setLight('light2', 'red');
+                    break;
+
+                case States.AUTO_AMBER_RED:
+                case States.MAN_AMBER_RED:
+                    // Đèn 1 vàng, đèn 2 đỏ
+                    setLight('light1', 'yellow');
+                    setLight('light2', 'red');
+                    break;
+
+                case States.SET_RED:
+                    // Cả hai đèn đều đỏ
+                    setLight('light1', 'red');
+                    setLight('light2', 'red');
+                    break;
+
+                case States.SET_AMBER:
+                    // Cả hai đèn đều vàng
+                    setLight('light1', 'yellow');
+                    setLight('light2', 'yellow');
+                    break;
+
+                case States.SET_GREEN:
+                    // Cả hai đèn đều xanh
+                    setLight('light1', 'green');
+                    setLight('light2', 'green');
+                    break;
+
+                default:
+                    // Tắt tất cả các đèn
+                    setLight('light1', null);
+                    setLight('light2', null);
+                    break;
+            }
+        }
+
+   </script>
+</body>
+
+</html>
+

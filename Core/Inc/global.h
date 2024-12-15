@@ -28,14 +28,15 @@ enum{
 #define BT_SET				1
 #define BT_OK				2
 
-#define SELECT_TIMEOUT	5000
-#define MANUAL_TIMEOUT	20000
-#define SETTING_TIMEOUT 15000
+#define SELECT_TIMEOUT	20000
+#define MANUAL_TIMEOUT	30000
+#define SETTING_TIMEOUT 25000
 #include "main.h"
 #include "software_timer.h"
 #include "button.h"
 #include "i2c-lcd.h"
 #include "stdio.h"
+#include "string.h"
 extern uint8_t status;
 extern uint8_t counters[2];
 extern uint8_t red_duration;
@@ -45,6 +46,7 @@ extern uint8_t temp_duration;
 extern char lcd_line1[17];
 extern char lcd_line2[17];
 
+void setup();
 void setCounter(uint8_t index, uint8_t value);
 void counterRun();
 void increaseDuration(uint8_t index);

@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "i2c-lcd.h"
 #include "stdio.h"
+#include "string.h"
 #include "button.h"
 #include "software_timer.h"
 #include "traffic_light_fsm_auto.h"
@@ -52,6 +53,7 @@ I2C_HandleTypeDef hi2c1;
 TIM_HandleTypeDef htim2;
 
 UART_HandleTypeDef huart2;
+UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 
@@ -63,6 +65,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -103,30 +106,19 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C1_Init();
   MX_TIM2_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT (&htim2 );
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-//  float myFloat = 3.14159;
-//  char str[20];
-//  sprintf(str, "%.2f", myFloat);
-//  HAL_Delay(1000);
-  lcd_init();
-  setTimer(0, 1000);
-  setTimer(0, 2000);
-  setTimer(1, 1000);
-  setTimer(2, 1000);
-  red_duration = 10;
-  amber_duration = 2;
-  green_duration = 8;
+  setup();
   while (1)
   {
-	  traffic_light_fsm_sel();
 	  traffic_light_fsm_auto();
 	  traffic_light_fsm_man();
+	  traffic_light_fsm_sel();
 	  traffic_light_fsm_set();
     /* USER CODE END WHILE */
 
@@ -281,6 +273,39 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE BEGIN USART2_Init 2 */
 
   /* USER CODE END USART2_Init 2 */
+
+}
+
+/**
+  * @brief USART3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART3_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART3_Init 0 */
+
+  /* USER CODE END USART3_Init 0 */
+
+  /* USER CODE BEGIN USART3_Init 1 */
+
+  /* USER CODE END USART3_Init 1 */
+  huart3.Instance = USART3;
+  huart3.Init.BaudRate = 115200;
+  huart3.Init.WordLength = UART_WORDLENGTH_8B;
+  huart3.Init.StopBits = UART_STOPBITS_1;
+  huart3.Init.Parity = UART_PARITY_NONE;
+  huart3.Init.Mode = UART_MODE_TX_RX;
+  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART3_Init 2 */
+
+  /* USER CODE END USART3_Init 2 */
 
 }
 

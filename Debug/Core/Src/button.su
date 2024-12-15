@@ -1,3 +1,4 @@
 button.c:21:6:buttonRun	24	static
 button.c:50:9:isButtonPressed	16	static
 button.c:58:9:isButtonHolding	16	static
+button.c:62:6:setButton	16	static

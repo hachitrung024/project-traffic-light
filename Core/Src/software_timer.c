@@ -9,8 +9,8 @@
 
 static uint32_t TIMER_CYCLE  = 10;
 
-static uint32_t timer_counters[MAX_TIMERS] ={0,0};
-static uint8_t timer_flags[] = {0,0};
+static uint32_t timer_counters[MAX_TIMERS] ={0,0,0,0};
+static uint8_t timer_flags[MAX_TIMERS];
 
 
 uint8_t isFlagTimer(uint8_t index){

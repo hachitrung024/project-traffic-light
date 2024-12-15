@@ -29,6 +29,8 @@ void traffic_light_fsm_auto(){
 				led_on(WAY2, RED);
 				setCounter(0, green_duration);
 				setCounter(1, red_duration);
+			}else if(isButtonPressed(0)){
+				status = INIT;
 			}
 			break;
 		case AUTO_GREEN_RED:
@@ -38,6 +40,8 @@ void traffic_light_fsm_auto(){
 				led_on(WAY1, AMBER);
 				led_on(WAY2, RED);
 				setCounter(0, amber_duration);
+			}else if(isButtonPressed(0)){
+				status = INIT;
 			}
 			break;
 		case AUTO_AMBER_RED:
@@ -48,6 +52,8 @@ void traffic_light_fsm_auto(){
 				led_on(WAY2, GREEN);
 				setCounter(0, red_duration);
 				setCounter(1, green_duration);
+			}else if(isButtonPressed(0)){
+				status = INIT;
 			}
 			break;
 		default:
